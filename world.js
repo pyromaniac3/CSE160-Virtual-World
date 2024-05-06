@@ -4,25 +4,25 @@
  var VSHADER_SOURCE = `
     precision mediump float;
     attribute vec4 a_Position;
-    attribute vec2 u_UV;
+    attribute vec2 a_UV;
     varying vec2 v_UV;
     uniform mat4 u_ModelMatrix;
     uniform mat4 u_GlobalRotateMatrix; 
     uniform mat4 u_ViewMatrix; 
     uniform mat4 u_ProjectionMatrix; 
     void main(){
-        gl_Position = u_Projectionmatrix * u_View matrix * u_GlobalRotateMatrix * u_ModelMatrix * a_Position;
+        gl_Position = u_ProjectionMatrix * u_ViewMatrix * u_GlobalRotateMatrix * u_ModelMatrix * a_Position;
         v_UV = a_UV;
     }`
 
  // Fragment shader program -- chaning the colors?
  var FSHADER_SOURCE = `
     precision mediump float;
-    varying vec2 v_UC;
+    varying vec2 v_UV;
     uniform vec4 u_FragColor; 
     void main(){
-        gl_FragColor = u_FragColor;
-        //gl_FragColor - vec4(v_UC, 1,1);
+        //gl_FragColor = u_FragColor;
+        gl_FragColor = vec4(v_UV, 1, 1); 
     }`
 
 //#region [[Global Variables]]
@@ -37,8 +37,8 @@ let u_ProjectionMatrix;
 let u_ViewMatrix;
 let u_GlobalRotateMatrix;
 
-// drawing
-var berryList = [];
+let g_globalAngle = 0; 
+
 //#endregion
 
 function setupWebGL(){
@@ -118,7 +118,8 @@ function connectVariablesToGLSL(){
 }
 
 function addActionsForHtmlUI(){
-   
+    let angleSlider = document.getElementById('angleSlider');
+    angleSlider.addEventListener('mousemove', function(){g_globalAngle = this.value; renderScene();});
 }
 
  function main() {
@@ -133,6 +134,7 @@ function addActionsForHtmlUI(){
     
     // call anim fram
     requestAnimationFrame(tick);
+    console.log(g_globalAngle);
  }
 
  var g_startTime = performance.now()/1000;
@@ -165,6 +167,7 @@ function addActionsForHtmlUI(){
    // gl.clearColor(0,0,0,1.0);
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
     gl.clear(gl.COLOR_BUFFER_BIT);
+
 
 
     // Check trhe time at the end of the function, and show on webpage
