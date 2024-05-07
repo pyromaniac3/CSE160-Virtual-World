@@ -2,6 +2,7 @@
  // ColoredPoints.js
  // Vertex shader program
 var VSHADER_SOURCE = `
+precision mediump float;
 attribute vec4 a_Position;
 attribute vec2 a_UV;
 attribute vec4 a_Color;
@@ -113,14 +114,14 @@ function connectVariablesToGLSL(){
     }
 
     // Get the storage location of u_Sampler
-    var u_Sampler0 = gl.getUniformLocation(gl.program, 'u_Sampler0');
+    u_Sampler0 = gl.getUniformLocation(gl.program, 'u_Sampler0');
     if (!u_Sampler0) {
         console.log('Failed to get the storage location of u_Sampler0');
         return;
     }
 
     // Get the storage location of u_Sampler
-    var u_Sampler1 = gl.getUniformLocation(gl.program, 'u_Sampler1');
+    u_Sampler1 = gl.getUniformLocation(gl.program, 'u_Sampler1');
     if (!u_Sampler1) {
         console.log('Failed to get the storage location of u_Sampler1');
         return;
@@ -249,7 +250,6 @@ var g_up = [0,1,0];
 
     // ground floor
     var ground = new Cube();
-    ground.color = [50/255,50/255,50/255,1];
     ground.textureNum = 1; // THESE NEEDS TO CHANGE WHEN IT WORKS
     ground.matrix.translate(0,-0.75,0);
     ground.matrix.scale(100,0,100);
@@ -303,7 +303,7 @@ function initTextures() {
     image.src = '../resources/sky.jpg';
 
     image1.onload = function(){ loadTexture1(image1); };
-    image1.src = '../resources/grid.jpg';
+    image1.src = '../resources/numbers.png';
     // add more img files here
 
     return true;
