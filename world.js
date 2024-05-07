@@ -271,6 +271,12 @@ var g_up = [0,1,0];
     cube2.matrix.translate(-0.5,0,-0.5);
     cube2.render();
     
+    var cube3 = new Cube();
+    cube3.color = [50/255,50/255,50/255,1];
+    cube3.matrix.translate(0,0.75,0);
+    cube3.textureNum = 1;
+    cube3.matrix.translate(-0.5,0,-0.5);
+    cube3.render();
 
     // Check trhe time at the end of the function, and show on webpage
     var duration = performance.now() - startTime;
@@ -300,10 +306,10 @@ function initTextures() {
     // Register the event handler to be called on loading an image
     image.onload = function(){ loadTexture0(image); };
     // Tell the browser to load an image
-    image.src = '../resources/sky.jpg';
+    image.src = './resources/sky.jpg';
 
     image1.onload = function(){ loadTexture1(image1); };
-    image1.src = '../resources/numbers.png';
+    image1.src = './resources/numbers.png';
     // add more img files here
 
     return true;
