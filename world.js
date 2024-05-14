@@ -274,7 +274,7 @@ var g_up = [0,1,0];
     var cube3 = new Cube();
     cube3.color = [50/255,50/255,50/255,1];
     cube3.matrix.translate(0,1,0);
-    cube3.textureNum = -2;
+    cube3.textureNum = 1;
     cube3.matrix.translate(-0.5,0,-0.5);
     cube3.render();
     
@@ -316,7 +316,7 @@ function initTextures() {
     return true;
   }
   
-function loadTexture(image, n) {
+function loadTexture0(image) {
 
     let texture = gl.createTexture();
     if (!texture) {
@@ -326,7 +326,7 @@ function loadTexture(image, n) {
 
     gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, 1); // Flip the image's y axis
     // Enable texture unit0
-    gl.activeTexture(gl.TEXTURE[n]);
+    gl.activeTexture(gl.TEXTURE0);
     // Bind the texture object to the target
     gl.bindTexture(gl.TEXTURE_2D, texture);
   
@@ -336,6 +336,29 @@ function loadTexture(image, n) {
     gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGB, gl.RGB, gl.UNSIGNED_BYTE, image);
     
     // Set the texture unit 0 to the sampler
-    gl.uniform1i(u_Sampler[n], n);
+    gl.uniform1i(u_Sampler0, 0);
+    console.log("finished loading first texture")
+  }
+  function loadTexture1(image) {
+
+    let texture = gl.createTexture();
+    if (!texture) {
+      console.error("Failed to create texture");
+      return -1;
+    }
+
+    gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, 1); // Flip the image's y axis
+    // Enable texture unit0
+    gl.activeTexture(gl.TEXTURE1);
+    // Bind the texture object to the target
+    gl.bindTexture(gl.TEXTURE_2D, texture);
+  
+    // Set the texture parameters
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+    // Set the texture image
+    gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGB, gl.RGB, gl.UNSIGNED_BYTE, image);
+    
+    // Set the texture unit 0 to the sampler
+    gl.uniform1i(u_Sampler1, 1);
     console.log("finished loading first texture")
   }
