@@ -307,10 +307,10 @@ function initTextures() {
     // Register the event handler to be called on loading an image
     image.onload = function(){ loadTexture0(image); };
     // Tell the browser to load an image
-    image.src = '../resources/sky.jpg';
+    image.src = 'sky.jpg';
 
     image1.onload = function(){ loadTexture1(image1); };
-    image1.src = '../resources/numbers.png';
+    image1.src = 'numbers.png';
     // add more img files here
 
     return true;
