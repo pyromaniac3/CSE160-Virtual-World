@@ -37,14 +37,6 @@ void main() {
         gl_FragColor = texture2D(u_Sampler0, v_UV);
       } else if (u_WhichTexture == 1) {
         gl_FragColor = texture2D(u_Sampler1, v_UV);
-      } else if (u_WhichTexture == 2) {
-        gl_FragColor = texture2D(u_Sampler2, v_UV);
-      } else if (u_WhichTexture == 3) {
-        gl_FragColor = texture2D(u_Sampler3, v_UV);
-      } else if (u_WhichTexture == 4) {
-        gl_FragColor = texture2D(u_Sampler4, v_UV);
-      } else if (u_WhichTexture == 5) {
-        gl_FragColor = texture2D(u_Sampler5, v_UV);
       } else {
         gl_FragColor = vec4(1, .2, .2, 1); // Error, reddish
       }
@@ -66,12 +58,6 @@ let u_GlobalRotateMatrix;
 let u_WhichTexture = 0;
 let u_Sampler0;
 let u_Sampler1;
-let u_Sampler2;
-let u_Sampler3;
-let u_Sampler4;
-let u_Sampler5;
-
-const TEXTURES = ['./resources/.png','./resources/.png','./resources/.png','./resources/.png','./resources/.png','./resources/.png'];
 
 let g_globalAngle = 0; 
 
@@ -284,13 +270,14 @@ var g_up = [0,1,0];
     cube2.textureNum = -2;
     cube2.matrix.translate(-0.5,0,-0.5);
     cube2.render();
-    
+
     var cube3 = new Cube();
     cube3.color = [50/255,50/255,50/255,1];
-    cube3.matrix.translate(0,0.75,0);
-    cube3.textureNum = 1;
+    cube3.matrix.translate(0,1,0);
+    cube3.textureNum = -2;
     cube3.matrix.translate(-0.5,0,-0.5);
     cube3.render();
+    
 
     // Check trhe time at the end of the function, and show on webpage
     var duration = performance.now() - startTime;
@@ -307,16 +294,26 @@ function sendTextToHTML(text,htmlID){
 }
 
 function initTextures() {
-    for (let i = 0; i < TEXTURES.length; i++) {
-        let image = new Image();
-        if (!image) {
-          console.error(`Failed to create image for texture ${i}`);
-        }
-        image.src = TEXTURES[i];
-        image.onload = () => {
-          loadTexture(image, i);
-        }
-      }
+    var image =  new Image();  // Create the image object
+    if (!image) {
+      console.log('Failed to create the image object');
+      return false;
+    }
+    var image1 =  new Image();  // Create the image object
+    if (!image1) {
+      console.log('Failed to create the image object');
+      return false;
+    }
+    // Register the event handler to be called on loading an image
+    image.onload = function(){ loadTexture0(image); };
+    // Tell the browser to load an image
+    image.src = '../resources/sky.jpg';
+
+    image1.onload = function(){ loadTexture1(image1); };
+    image1.src = '../resources/numbers.png';
+    // add more img files here
+
+    return true;
   }
   
 function loadTexture(image, n) {
