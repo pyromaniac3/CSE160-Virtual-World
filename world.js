@@ -37,6 +37,14 @@ void main() {
         gl_FragColor = texture2D(u_Sampler0, v_UV);
       } else if (u_WhichTexture == 1) {
         gl_FragColor = texture2D(u_Sampler1, v_UV);
+      } else if (u_WhichTexture == 2) {
+        gl_FragColor = texture2D(u_Sampler2, v_UV);
+      } else if (u_WhichTexture == 3) {
+        gl_FragColor = texture2D(u_Sampler3, v_UV);
+      } else if (u_WhichTexture == 4) {
+        gl_FragColor = texture2D(u_Sampler4, v_UV);
+      } else if (u_WhichTexture == 5) {
+        gl_FragColor = texture2D(u_Sampler5, v_UV);
       } else {
         gl_FragColor = vec4(1, .2, .2, 1); // Error, reddish
       }
@@ -58,6 +66,12 @@ let u_GlobalRotateMatrix;
 let u_WhichTexture = 0;
 let u_Sampler0;
 let u_Sampler1;
+let u_Sampler2;
+let u_Sampler3;
+let u_Sampler4;
+let u_Sampler5;
+
+const TEXTURES = ['./resources/.png','./resources/.png','./resources/.png','./resources/.png','./resources/.png','./resources/.png'];
 
 let g_globalAngle = 0; 
 
@@ -293,72 +307,38 @@ function sendTextToHTML(text,htmlID){
 }
 
 function initTextures() {
-    var image =  new Image();  // Create the image object
-    if (!image) {
-      console.log('Failed to create the image object');
-      return false;
-    }
-    var image1 =  new Image();  // Create the image object
-    if (!image1) {
-      console.log('Failed to create the image object');
-      return false;
-    }
-    // Register the event handler to be called on loading an image
-    image.onload = function(){ loadTexture0(image); };
-    // Tell the browser to load an image
-    image.src = './resources/sky.jpg';
-
-    image1.onload = function(){ loadTexture1(image1); };
-    image1.src = './resources/numbers.png';
-    // add more img files here
-
-    return true;
+    for (let i = 0; i < TEXTURES.length; i++) {
+        let image = new Image();
+        if (!image) {
+          console.error(`Failed to create image for texture ${i}`);
+        }
+        image.src = TEXTURES[i];
+        image.onload = () => {
+          loadTexture(image, i);
+        }
+      }
   }
   
-function loadTexture0(image0) {
+function loadTexture(image, n) {
 
-    let texture0 = gl.createTexture();
-    if (!texture0) {
+    let texture = gl.createTexture();
+    if (!texture) {
       console.error("Failed to create texture");
       return -1;
     }
 
     gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, 1); // Flip the image's y axis
     // Enable texture unit0
-    gl.activeTexture(gl.TEXTURE0);
+    gl.activeTexture(gl.TEXTURE[n]);
     // Bind the texture object to the target
-    gl.bindTexture(gl.TEXTURE_2D, texture0);
+    gl.bindTexture(gl.TEXTURE_2D, texture);
   
     // Set the texture parameters
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
     // Set the texture image
-    gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGB, gl.RGB, gl.UNSIGNED_BYTE, image0);
+    gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGB, gl.RGB, gl.UNSIGNED_BYTE, image);
     
     // Set the texture unit 0 to the sampler
-    gl.uniform1i(u_Sampler0, 0);
+    gl.uniform1i(u_Sampler[n], n);
     console.log("finished loading first texture")
-  }
-  
-  function loadTexture1(image1) {
-    let texture1 = gl.createTexture();
-    if (!texture1) {
-      console.error("Failed to create texture");
-      return -1;
-    }
-
-    gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, 1); // Flip the image's y axis
-    // Enable texture unit0
-    gl.activeTexture(gl.TEXTURE1);
-    // Bind the texture object to the target
-    gl.bindTexture(gl.TEXTURE_2D, texture1);
-  
-    // Set the texture parameters
-    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
-    // Set the texture image
-    gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGB, gl.RGB, gl.UNSIGNED_BYTE, image1);
-    
-    // Set the texture unit 0 to the sampler
-    gl.uniform1i(u_Sampler1, 1);
-
-    console.log("finished loading second texture")
   }
